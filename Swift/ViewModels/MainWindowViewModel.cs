@@ -1,25 +1,12 @@
 ﻿using System;
 using ReactiveUI;
+using Swift.Helpers;
+using Swift.Models;
 
 namespace Swift.ViewModels {
-    public interface IMainWindowViewModel {
-        string Title { get; }
-        bool IsVisible { get; set; }
-        ReactiveCommand<object> VisibilityCommand { get; }
-        ReactiveCommand<object> ExitCommand { get; }
-    }
-
-    public class MainWindowViewModel : ReactiveObject, IMainWindowViewModel {
+    public class MainWindowViewModel : ReactiveObject {
+        private ReactiveObject _content;
         private bool _isVisible;
-
-        public MainWindowViewModel() {
-            VisibilityCommand = ReactiveCommand.Create();
-            ExitCommand = ReactiveCommand.Create();
-
-            VisibilityCommand.Subscribe(_ => IsVisible = !IsVisible);
-        }
-
-        #region IMainWindowViewModel Members
 
         public string Title {
             get { return App.AppName; }
@@ -30,10 +17,31 @@ namespace Swift.ViewModels {
             set { this.RaiseAndSetIfChanged(ref _isVisible, value); }
         }
 
+        public ReactiveObject Content {
+            get { return _content; }
+            set { this.RaiseAndSetIfChanged(ref _content, value); }
+        }
+
         public ReactiveCommand<object> VisibilityCommand { get; private set; }
 
         public ReactiveCommand<object> ExitCommand { get; private set; }
 
-        #endregion
+        public MainWindowViewModel() {
+            ShowInitialContent();
+
+            VisibilityCommand = ReactiveCommand.Create();
+            ExitCommand = ReactiveCommand.Create();
+
+            VisibilityCommand.Subscribe(_ => IsVisible = !IsVisible);
+        }
+
+        private void ShowInitialContent() {
+            var account = Service.Get<Account>();
+            if (account.HasData()) {
+                //Content = Service.Get<>()
+            } else {
+                Content = Service.Get<AuthViewModel>();
+            }
+        }
     }
 }

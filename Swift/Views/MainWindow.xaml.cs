@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Reactive.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Interop;
 using Hardcodet.Wpf.TaskbarNotification.Interop;
 using ReactiveUI;
@@ -15,12 +13,12 @@ namespace Swift.Views {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, IViewFor<IMainWindowViewModel> {
+    public partial class MainWindow : Window, IViewFor<MainWindowViewModel> {
         private double _scalingFactor = double.NaN;
 
         public MainWindow() {
             InitializeComponent();
-            ViewModel = Service.Get<IMainWindowViewModel>();
+            ViewModel = Service.Get<MainWindowViewModel>();
 
             this.OneWayBind(ViewModel, x => x.Title, x => x.Title);
             this.OneWayBind(ViewModel, x => x.Title, x => x.Tray.ToolTipText);
@@ -29,19 +27,30 @@ namespace Swift.Views {
             Observable.FromEventPattern<RoutedEventHandler, RoutedEventArgs>(
                 h => Tray.TrayLeftMouseUp += h, h => Tray.TrayLeftMouseUp -= h)
                 .Subscribe(_ => ViewModel.VisibilityCommand.Execute(null));
+            Observable.FromEventPattern<RoutedEventHandler, RoutedEventArgs>(
+                h => Tray.TrayRightMouseDown += h, h => Tray.TrayRightMouseDown -= h)
+                .Subscribe(_ => ViewModel.IsVisible = false);
             this.BindCommand(ViewModel, x => x.ExitCommand, x => x.MenuExit);
 
             // handle tray events
+            this.WhenAnyObservable(x => x.ViewModel.ExitCommand).Subscribe(_ => Close());
+
+            // content changing
+            this.WhenAnyValue(x => x.ViewModel.Content)
+                .Where(x => x != null)
+                .Subscribe(model => Content.ViewModel = model);
+
+            // handle resizing of the content
+            this.WhenAnyValue(x => x.Width).Merge(this.WhenAnyValue(x => x.Height))
+                .Subscribe(_ => SetWindowLocation());
+
             this.WhenAnyValue(x => x.ViewModel.IsVisible).Subscribe(visible => {
                 if (visible) {
-                    SetWindowLocation();
                     Show();
-                    WindowState = WindowState.Normal;
                 } else {
                     Hide();
                 }
             });
-            this.WhenAnyObservable(x => x.ViewModel.ExitCommand).Subscribe(_ => Close());
 
             // we need to disable the resizing cursors
             this.Events().Loaded.Subscribe(_ => {
@@ -56,14 +65,14 @@ namespace Swift.Views {
             });
         }
 
-        #region IViewFor<IMainWindowViewModel> Members
+        #region IViewFor<MainWindowViewModel> Members
 
         object IViewFor.ViewModel {
             get { return ViewModel; }
             set { ViewModel = value as MainWindowViewModel; }
         }
 
-        public IMainWindowViewModel ViewModel { get; set; }
+        public MainWindowViewModel ViewModel { get; set; }
 
         #endregion
 
