@@ -38,11 +38,5 @@ namespace Swift {
 
             base.OnStartup(e);
         }
-
-        protected override void OnExit(ExitEventArgs e) {
-            // Cleanup Akavache
-            BlobCache.Shutdown().Wait();
-            base.OnExit(e);
-        }
     }
 }

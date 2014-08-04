@@ -18,7 +18,7 @@ namespace Swift {
                 new SQLitePersistentBlobCache(Path.Combine(dir, "LocalCache.db")), typeof(IBlobCache), "LocalMachine");
 
             // app registrations
-            Service.RegisterLazy(() => new MainWindowViewModel(), typeof(MainWindowViewModel));
+            Service.RegisterLazy(() => new MainWindowViewModel(), typeof(IMainWindowViewModel));
         }
     }
 }
