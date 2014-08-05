@@ -17,13 +17,13 @@ namespace Swift.Views {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, IViewFor<MainWindowViewModel> {
+    public partial class MainWindow : Window, IViewFor<MainViewModel> {
         private readonly MouseHookListener _mouseHook;
         private double _scalingFactor = double.NaN;
 
         public MainWindow() {
             InitializeComponent();
-            ViewModel = Service.Get<MainWindowViewModel>();
+            ViewModel = Service.Get<MainViewModel>();
 
             this.OneWayBind(ViewModel, x => x.Title, x => x.Title);
             this.OneWayBind(ViewModel, x => x.Title, x => x.Tray.ToolTipText);
@@ -106,10 +106,10 @@ namespace Swift.Views {
 
         object IViewFor.ViewModel {
             get { return ViewModel; }
-            set { ViewModel = value as MainWindowViewModel; }
+            set { ViewModel = value as MainViewModel; }
         }
 
-        public MainWindowViewModel ViewModel { get; set; }
+        public MainViewModel ViewModel { get; set; }
 
         #endregion
 

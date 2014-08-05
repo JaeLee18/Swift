@@ -4,7 +4,7 @@ using Swift.Helpers;
 using Swift.Models;
 
 namespace Swift.ViewModels {
-    public class MainWindowViewModel : ReactiveObject {
+    public class MainViewModel : ReactiveObject {
         private readonly Account _account;
         private ReactiveObject _content;
         private bool _isVisible;
@@ -47,7 +47,7 @@ namespace Swift.ViewModels {
 
         public ReactiveCommand<object> ExitCommand { get; private set; }
 
-        public MainWindowViewModel() {
+        public MainViewModel() {
             _account = Service.Get<Account>();
             ShowInitialContent();
 
@@ -66,7 +66,7 @@ namespace Swift.ViewModels {
 
         private void ShowInitialContent() {
             if (_account.HasCredentials) {
-                //Content = Service.Get<>()
+                Content = Service.Get<AppViewModel>();
             } else {
                 Content = Service.Get<AuthViewModel>();
             }

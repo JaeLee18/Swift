@@ -19,9 +19,8 @@ namespace Swift.API.Http {
             return Client.ExecuteRxRaw(request);
         }
 
-        public IObservable<T> ExecuteRequest<T>(string endpoint, IList<Parameter> parameters,
-            object data = null, string expectedRoot = null, Method method = Method.GET)
-            where T : new() {
+        public IObservable<IRestResponse> ExecuteRequest(string endpoint, IList<Parameter> parameters,
+            object data = null, string expectedRoot = null, Method method = Method.GET) {
             var request = BuildRequest(endpoint, parameters);
             request.RootElement = expectedRoot;
             request.Method = method;
@@ -32,7 +31,7 @@ namespace Swift.API.Http {
                 request.AddBody(data);
             }
 
-            return Client.ExecuteRx<T>(request);
+            return Client.ExecuteRxRaw(request);
         }
 
         private static IRestRequest BuildRequest(string endpoint, IEnumerable<Parameter> parameters) {

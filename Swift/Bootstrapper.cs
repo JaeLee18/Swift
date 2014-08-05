@@ -28,10 +28,12 @@ namespace Swift {
 
             Service.RegisterLazy(() => new HummingbirdClient(), typeof(HummingbirdClient));
 
-            Service.RegisterLazy(() => new MainWindowViewModel(), typeof(MainWindowViewModel));
+            Service.RegisterLazy(() => new MainViewModel(), typeof(MainViewModel));
             Service.RegisterLazy(() => new AuthViewModel(), typeof(AuthViewModel));
+            Service.RegisterLazy(() => new AppViewModel(), typeof(AppViewModel));
 
             Service.Register(() => new AuthView(), typeof(IViewFor<AuthViewModel>));
+            Service.Register(() => new AppView(), typeof(IViewFor<AppViewModel>));
         }
     }
 }

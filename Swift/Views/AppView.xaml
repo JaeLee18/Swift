@@ -1,0 +1,30 @@
+﻿<UserControl x:Class="Swift.Views.AppView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:helpers="clr-namespace:Swift.Views.Helpers"
+             Background="White" Width="310" MaxWidth="310">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="45" />
+        </Grid.RowDefinitions>
+        <!-- no anime detected -->
+        <StackPanel Grid.Row="0" Margin="20" Visibility="Visible">
+            <TextBlock Text="&#xf030;" Foreground="DarkGray" FontSize="48"
+                       FontFamily="pack://application:,,,/Swift;component/Resources/#github-octicons"
+                       HorizontalAlignment="Center" />
+            <TextBlock Text="Looks like you aren't watching anime" Foreground="Gray" FontSize="14" FontStyle="Italic" HorizontalAlignment="Center" Margin="0,10,0,0" />
+        </StackPanel>
+        <!-- anime detected -->
+        <Grid Grid.Row="0" Visibility="Collapsed" />
+        <Border Grid.Row="1" Background="WhiteSmoke" BorderThickness="0,1,0,0" BorderBrush="LightGray">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock x:Name="ExternalText" Text="Open Hummingbird..." VerticalAlignment="Center" Cursor="Hand">
+                    <TextBlock.Foreground>
+                        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.HotTrackColorKey}}" />
+                    </TextBlock.Foreground>
+                </TextBlock>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

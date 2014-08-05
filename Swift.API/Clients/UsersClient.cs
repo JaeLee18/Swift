@@ -19,7 +19,9 @@ namespace Swift.API.Clients {
             var parameters = new List<Parameter> {
                 new Parameter { Name = "username", Value = username, Type = ParameterType.UrlSegment }
             };
-            return _connection.ExecuteRequest<User>("users/{username}", parameters);
+            var ret = _connection.ExecuteRequest("users/{username}", parameters)
+                .SelectMany(x => x.ExpectStatus(HttpStatusCode.OK));
+            return ret.Deserialize<User>();
         }
 
         public IObservable<string> Authenticate(string username, string password) {

@@ -54,8 +54,8 @@ namespace Swift.ViewModels {
                     account.Save();
 
                     // change the content over to the app
-                    var vm = Service.Get<MainWindowViewModel>();
-                    //vm.Content = Service.Get<>()
+                    var vm = Service.Get<MainViewModel>();
+                    vm.Content = Service.Get<AppViewModel>();
                 }));
 
                 d(AuthCommand.ThrownExceptions.Select(x => {

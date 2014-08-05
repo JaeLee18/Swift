@@ -8,12 +8,6 @@ using Swift.API.Exceptions;
 
 namespace Swift.API.Extensions {
     public static class RestSharpExtensions {
-        public static IObservable<T> ExecuteRx<T>(this IRestClient client, IRestRequest request)
-            where T : new() {
-            var ret = Observable.StartAsync(async () => await client.ExecuteTaskAsync(request).ConfigureAwait(false));
-            return ret.ThrowIfException().Deserialize<T>();
-        }
-
         public static IObservable<IRestResponse> ExecuteRxRaw(this IRestClient client, IRestRequest request) {
             var ret = Observable.StartAsync(async () => await client.ExecuteTaskAsync(request).ConfigureAwait(false));
             return ret.ThrowIfException();

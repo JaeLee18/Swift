@@ -32,9 +32,15 @@ namespace Swift {
             ProfileOptimization.SetProfileRoot(dir);
             ProfileOptimization.StartProfile("Swift.profile");
 
+            // create cache dir
+            var cacheDir = Path.Combine(dir, "Cache");
+            if (!Directory.Exists(cacheDir)) {
+                Directory.CreateDirectory(cacheDir);
+            }
+
             // run registration
             _bootstrapper = new Bootstrapper();
-            _bootstrapper.AppRegistration(dir);
+            _bootstrapper.AppRegistration(cacheDir);
 
             base.OnStartup(e);
         }
