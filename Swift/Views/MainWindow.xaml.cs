@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Interop;
 using Hardcodet.Wpf.TaskbarNotification.Interop;
+using MouseKeyboardActivityMonitor;
+using MouseKeyboardActivityMonitor.WinApi;
 using ReactiveUI;
 using Swift.Helpers;
 using Swift.Native;
@@ -14,6 +17,7 @@ namespace Swift.Views {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window, IViewFor<MainWindowViewModel> {
+        private readonly MouseHookListener _mouseHook;
         private double _scalingFactor = double.NaN;
 
         public MainWindow() {
@@ -30,20 +34,30 @@ namespace Swift.Views {
             Observable.FromEventPattern<RoutedEventHandler, RoutedEventArgs>(
                 h => Tray.TrayRightMouseDown += h, h => Tray.TrayRightMouseDown -= h)
                 .Subscribe(_ => ViewModel.IsVisible = false);
+
+            // Tray context action
+            this.BindCommand(ViewModel, x => x.ProfileCommand, x => x.MenuProfile);
+            this.BindCommand(ViewModel, x => x.DashboardCommand, x => x.MenuDash);
+            this.BindCommand(ViewModel, x => x.CommunityCommand, x => x.MenuForums);
             this.BindCommand(ViewModel, x => x.ExitCommand, x => x.MenuExit);
 
-            // handle tray events
+            this.WhenAnyObservable(x => x.ViewModel.ProfileCommand).Subscribe(_ => Process.Start(ViewModel.ProfileUrl));
+            this.WhenAnyObservable(x => x.ViewModel.DashboardCommand)
+                .Subscribe(_ => Process.Start(ViewModel.DashboardUrl));
+            this.WhenAnyObservable(x => x.ViewModel.CommunityCommand)
+                .Subscribe(_ => Process.Start(ViewModel.CommunityUrl));
             this.WhenAnyObservable(x => x.ViewModel.ExitCommand).Subscribe(_ => Close());
 
-            // content changing
+            // Content view handling
             this.WhenAnyValue(x => x.ViewModel.Content)
                 .Where(x => x != null)
                 .Subscribe(model => Content.ViewModel = model);
 
-            // handle resizing of the content
+            // Readjust window location when window size changes
             this.WhenAnyValue(x => x.Width).Merge(this.WhenAnyValue(x => x.Height))
                 .Subscribe(_ => SetWindowLocation());
 
+            // Show/Hide window based on IsVisible in ViewModel
             this.WhenAnyValue(x => x.ViewModel.IsVisible).Subscribe(visible => {
                 if (visible) {
                     Show();
@@ -52,8 +66,20 @@ namespace Swift.Views {
                 }
             });
 
-            // we need to disable the resizing cursors
+            // create global mouse hook
+            _mouseHook = new MouseHookListener(new GlobalHooker());
+            // hide the window if user clicks outside the window
+            Observable.FromEventPattern<MouseEventExtArgs>(
+                h => _mouseHook.MouseDownExt += h, h => _mouseHook.MouseDownExt -= h)
+                .Select(x => x.EventArgs)
+                .Subscribe(e => {
+                    if (e.X < Left || e.X > (Left + Width) || e.Y < Top || e.Y > (Top + Height)) {
+                        ViewModel.IsVisible = false;
+                    }
+                });
+
             this.Events().Loaded.Subscribe(_ => {
+                // we need to disable the resizing cursors
                 var windowHandle = new WindowInteropHelper(this).Handle;
                 var windowSource = HwndSource.FromHwnd(windowHandle);
                 if (windowSource == null) {
@@ -62,6 +88,9 @@ namespace Swift.Views {
 
                 var resizeHook = new ResizeHook();
                 windowSource.AddHook(resizeHook.WndProc);
+
+                // enable mouse hook
+                _mouseHook.Enabled = true;
             });
         }
 

@@ -25,8 +25,8 @@ namespace Swift.Models {
             set { this.RaiseAndSetIfChanged(ref _token, value); }
         }
 
-        public bool HasData() {
-            return !(Username.Empty() && Token.Empty());
+        public bool HasCredentials {
+            get { return !(Username.Empty() && Token.Empty()); }
         }
 
         public IObservable<Unit> Clear() {
