@@ -13,6 +13,11 @@ namespace Swift.Views {
             InitializeComponent();
 
             this.WhenActivated(d => {
+                d(this.Bind(ViewModel, x => x.Username, x => x.Username.Text));
+                d(this.Bind(ViewModel, x => x.Password, x => x.Password.Password, Password.Events().PasswordChanged));
+                d(this.BindCommand(ViewModel, x => x.AuthCommand, x => x.SignIn));
+
+                d(Username.Events().LostFocus.InvokeCommand(ViewModel, x => x.AvatarCommand));
                 d(this.WhenAnyObservable(x => x.ViewModel.AvatarCommand)
                     .Subscribe(bitmap => Avatar.Source = bitmap.ToNative()));
             });

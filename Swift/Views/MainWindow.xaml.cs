@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Interop;
+using Hardcodet.Wpf.TaskbarNotification;
 using Hardcodet.Wpf.TaskbarNotification.Interop;
 using MouseKeyboardActivityMonitor;
 using MouseKeyboardActivityMonitor.WinApi;
@@ -51,7 +52,7 @@ namespace Swift.Views {
             // Content view handling
             this.WhenAnyValue(x => x.ViewModel.Content)
                 .Where(x => x != null)
-                .Subscribe(model => Content.ViewModel = model);
+                .Subscribe(model => ContentView.ViewModel = model);
 
             // Readjust window location when window size changes
             this.WhenAnyValue(x => x.Width).Merge(this.WhenAnyValue(x => x.Height))
@@ -77,6 +78,12 @@ namespace Swift.Views {
                         ViewModel.IsVisible = false;
                     }
                 });
+
+            // app level error handler
+            UserError.RegisterHandler(error => {
+                Tray.ShowBalloonTip("Error", error.ErrorMessage, BalloonIcon.Error);
+                return Observable.Return(RecoveryOptionResult.CancelOperation);
+            });
 
             this.Events().Loaded.Subscribe(_ => {
                 // we need to disable the resizing cursors

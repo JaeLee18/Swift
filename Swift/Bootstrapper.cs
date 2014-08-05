@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Akavache;
 using Akavache.Sqlite3;
 using ReactiveUI;
+using Swift.API;
 using Swift.Helpers;
 using Swift.Models;
 using Swift.ViewModels;
@@ -24,6 +25,9 @@ namespace Swift {
 
             // app registrations
             Service.RegisterConstant(Task.Run(async () => await new Account().UpdateFromCache()).Result, typeof(Account));
+
+            Service.RegisterLazy(() => new HummingbirdClient(), typeof(HummingbirdClient));
+
             Service.RegisterLazy(() => new MainWindowViewModel(), typeof(MainWindowViewModel));
             Service.RegisterLazy(() => new AuthViewModel(), typeof(AuthViewModel));
 

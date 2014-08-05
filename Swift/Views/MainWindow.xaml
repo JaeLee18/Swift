@@ -22,7 +22,7 @@
             </tb:TaskbarIcon.ContextMenu>
         </tb:TaskbarIcon>
         <!-- Content Host -->
-        <rxui:ViewModelViewHost x:Name="Content" VerticalContentAlignment="Stretch"
+        <rxui:ViewModelViewHost x:Name="ContentView" VerticalContentAlignment="Stretch"
                                 HorizontalContentAlignment="Stretch" />
     </Grid>
 </Window>
