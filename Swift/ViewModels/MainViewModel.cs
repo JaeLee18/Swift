@@ -66,7 +66,7 @@ namespace Swift.ViewModels {
 
         private void ShowInitialContent() {
             if (_account.HasCredentials) {
-                Content = Service.Get<AppViewModel>();
+                Content = Service.Get<AnimeViewModel>();
             } else {
                 Content = Service.Get<AuthViewModel>();
             }

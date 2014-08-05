@@ -23,6 +23,6 @@
         </tb:TaskbarIcon>
         <!-- Content Host -->
         <rxui:ViewModelViewHost x:Name="ContentView" VerticalContentAlignment="Stretch"
-                                HorizontalContentAlignment="Stretch" />
+                                HorizontalContentAlignment="Stretch" IsTabStop="False" />
     </Grid>
 </Window>

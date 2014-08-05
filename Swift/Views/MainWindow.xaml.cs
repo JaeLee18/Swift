@@ -52,7 +52,10 @@ namespace Swift.Views {
             // Content view handling
             this.WhenAnyValue(x => x.ViewModel.Content)
                 .Where(x => x != null)
-                .Subscribe(model => ContentView.ViewModel = model);
+                .Subscribe(model => {
+                    ContentView.ViewModel = model;
+                    SetWindowLocation();
+                });
 
             // Readjust window location when window size changes
             this.WhenAnyValue(x => x.Width).Merge(this.WhenAnyValue(x => x.Height))

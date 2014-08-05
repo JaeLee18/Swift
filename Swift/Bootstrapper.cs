@@ -30,10 +30,10 @@ namespace Swift {
 
             Service.RegisterLazy(() => new MainViewModel(), typeof(MainViewModel));
             Service.RegisterLazy(() => new AuthViewModel(), typeof(AuthViewModel));
-            Service.RegisterLazy(() => new AppViewModel(), typeof(AppViewModel));
+            Service.RegisterLazy(() => new AnimeViewModel(), typeof(AnimeViewModel));
 
             Service.Register(() => new AuthView(), typeof(IViewFor<AuthViewModel>));
-            Service.Register(() => new AppView(), typeof(IViewFor<AppViewModel>));
+            Service.Register(() => new AnimeView(), typeof(IViewFor<AnimeViewModel>));
         }
     }
 }

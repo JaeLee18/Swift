@@ -55,7 +55,7 @@ namespace Swift.ViewModels {
 
                     // change the content over to the app
                     var vm = Service.Get<MainViewModel>();
-                    vm.Content = Service.Get<AppViewModel>();
+                    vm.Content = Service.Get<AnimeViewModel>();
                 }));
 
                 d(AuthCommand.ThrownExceptions.Select(x => {

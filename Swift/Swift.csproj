@@ -154,11 +154,11 @@
     <Compile Include="Native\Constants.cs" />
     <Compile Include="Native\ResizeHook.cs" />
     <Compile Include="Native\User32.cs" />
-    <Compile Include="ViewModels\AppViewModel.cs" />
+    <Compile Include="ViewModels\AnimeViewModel.cs" />
     <Compile Include="ViewModels\AuthViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="Views\AppView.xaml.cs">
-      <DependentUpon>AppView.xaml</DependentUpon>
+    <Compile Include="Views\AnimeView.xaml.cs">
+      <DependentUpon>AnimeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\AuthView.xaml.cs">
       <DependentUpon>AuthView.xaml</DependentUpon>
@@ -200,7 +200,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Views\AppView.xaml">
+    <Page Include="Views\AnimeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
