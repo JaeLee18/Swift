@@ -61,6 +61,7 @@ namespace Swift.Views {
             // Show/Hide window based on IsVisible in ViewModel
             this.WhenAnyValue(x => x.ViewModel.IsVisible).Subscribe(visible => {
                 if (visible) {
+                    SetWindowLocation();
                     Show();
                 } else {
                     Hide();

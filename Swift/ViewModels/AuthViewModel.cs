@@ -17,6 +17,8 @@ namespace Swift.ViewModels {
         private string _username;
         public ReactiveCommand<IBitmap> AvatarCommand { get; private set; }
         public ReactiveCommand<string> AuthCommand { get; private set; }
+        public ReactiveCommand<object> RegistrationCommand { get; private set; }
+        public ReactiveCommand<object> ResetPasswordCommand { get; private set; } 
 
         public string Username {
             get { return _username; }
@@ -28,11 +30,21 @@ namespace Swift.ViewModels {
             set { this.RaiseAndSetIfChanged(ref _password, value); }
         }
 
+        public string RegistrationUrl {
+            get { return "http://hummingbird.me/users/sign_up"; }
+        }
+
+        public string ResetUrl {
+            get { return "http://hummingbird.me/users/password/new"; }
+        }
+
         public AuthViewModel() {
             Activator = new ViewModelActivator();
             AvatarCommand = ReactiveCommand.CreateAsyncObservable(_ => GetAvatar());
             AuthCommand = ReactiveCommand.CreateAsyncObservable(this.WhenAnyValue(x => x.Username, x => x.Password,
                 (u, p) => !u.Empty() && !p.Empty()), _ => Authenticate());
+            RegistrationCommand = ReactiveCommand.Create();
+            ResetPasswordCommand = ReactiveCommand.Create();
 
             this.WhenActivated(d => {
                 d(AuthCommand.Subscribe(token => {

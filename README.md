@@ -4,7 +4,7 @@ Swift is a [Hummingbird](http://hummingbird.me) client for Windows.
 
 ### Screenshots
 
-![Login](http://i.imgur.com/7qQSd3A.png)
+![Login](http://i.imgur.com/PJwskaM.png)
 
 ### License
 
