@@ -3,7 +3,7 @@ using System.Windows.Controls;
 
 namespace Swift.Views.Helpers {
     /// <summary>
-    /// http://prabu-guru.blogspot.com.au/2010/06/how-to-add-watermark-text-to-textbox.html
+    /// Credit: http://prabu-guru.blogspot.com.au/2010/06/how-to-add-watermark-text-to-textbox.html
     /// </summary>
     public class Watermark : DependencyObject {
         #region Attached Properties

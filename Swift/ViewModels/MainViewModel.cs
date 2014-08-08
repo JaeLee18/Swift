@@ -27,24 +27,20 @@ namespace Swift.ViewModels {
             get { return "http://forums.hummingbird.me/"; }
         }
 
-        public bool IsVisible {
-            get { return _isVisible; }
-            set { this.RaiseAndSetIfChanged(ref _isVisible, value); }
-        }
-
         public ReactiveObject Content {
             get { return _content; }
             set { this.RaiseAndSetIfChanged(ref _content, value); }
         }
 
-        public ReactiveCommand<object> VisibilityCommand { get; private set; }
+        public bool IsVisible {
+            get { return _isVisible; }
+            set { this.RaiseAndSetIfChanged(ref _isVisible, value); }
+        }
 
+        public ReactiveCommand<object> VisbilityCommand { get; private set; }
         public ReactiveCommand<object> ProfileCommand { get; private set; }
-
         public ReactiveCommand<object> DashboardCommand { get; private set; }
-
-        public ReactiveCommand<object> CommunityCommand { get; private set; } 
-
+        public ReactiveCommand<object> CommunityCommand { get; private set; }
         public ReactiveCommand<object> ExitCommand { get; private set; }
 
         public MainViewModel() {
@@ -53,15 +49,13 @@ namespace Swift.ViewModels {
 
             var isLoggedIn = this.WhenAnyValue(x => x._account.HasCredentials);
 
-            VisibilityCommand = ReactiveCommand.Create();
-
+            VisbilityCommand = ReactiveCommand.Create();
             ProfileCommand = ReactiveCommand.Create(isLoggedIn);
             DashboardCommand = ReactiveCommand.Create(isLoggedIn);
             CommunityCommand = ReactiveCommand.Create(isLoggedIn);
-
             ExitCommand = ReactiveCommand.Create();
 
-            VisibilityCommand.Subscribe(_ => IsVisible = !IsVisible);
+            VisbilityCommand.Subscribe(value => IsVisible = (bool)value);
         }
 
         private void ShowInitialContent() {

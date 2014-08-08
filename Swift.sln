@@ -54,6 +54,7 @@ Global
 		{D4899D52-C1AE-4704-82D0-7449D694CE0C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{D4899D52-C1AE-4704-82D0-7449D694CE0C}.Release|x64.ActiveCfg = Release|Any CPU
 		{D4899D52-C1AE-4704-82D0-7449D694CE0C}.Release|x86.ActiveCfg = Release|Any CPU
+		{D4899D52-C1AE-4704-82D0-7449D694CE0C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

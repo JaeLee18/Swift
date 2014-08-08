@@ -18,7 +18,6 @@ Checkout the topic dedicated to Swift @ [Hummingbird](#)
 	* Windows Media Player
 	* PotPlayer
 	* VLC
-* Export your Hummingbird list to multiple formats
 
 ### Installing (Planned)
 
