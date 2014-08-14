@@ -1,33 +1,9 @@
 # Swift
 
+**Status:** *Early Development*
+
 Swift is an open source Windows client for [Hummingbird](http://hummingbird.me) that
 sits in your system tray and automagically detects anime that you're watching.
-
-Checkout the topic dedicated to Swift @ [Hummingbird](#)
-
-![Screenshots]()
-
-### Features (Planned)
-
-* Automagically detects anime from the following streaming websites
-	* Crunchyroll
-	* Netflix
-	* AnimeLab
-	* Daisuki
-* Automagically detects anime from the following media players
-	* Windows Media Player
-	* PotPlayer
-	* VLC
-
-### Installing (Planned)
-
-To install Swift, simply download one of the following installers:
-
-[Windows 7/8+ 32bit]()
-
-[Windows 7/8+ 64bit]()
-
-Swift comes with an auto-updater, so you'll only need to download it once!
 
 ### Contributing
 
@@ -37,9 +13,9 @@ Swift comes with an auto-updater, so you'll only need to download it once!
 4. Push to the branch (git push origin my-new-feature)
 5. Create new Pull Request
 
-### Other Projects
+### Other Hummingbird Related Projects
 
-* [Taiga](https://github.com/erengy/taiga)
+* [Taiga (Windows)](https://github.com/erengy/taiga)
 
 ### License
 

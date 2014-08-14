@@ -13,6 +13,8 @@ namespace Swift.Views {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window, IViewFor<MainViewModel> {
+        private bool _shouldNotShow;
+
         public MainWindow() {
             InitializeComponent();
             ViewModel = Service.Get<MainViewModel>();
@@ -35,6 +37,12 @@ namespace Swift.Views {
             this.WhenAnyObservable(x => x.ViewModel.ExitCommand)
                 .Subscribe(_ => Close());
 
+            // app level error handler
+            UserError.RegisterHandler(error => {
+                Tray.ShowBalloonTip("Error", error.ErrorMessage, BalloonIcon.Error);
+                return Observable.Return(RecoveryOptionResult.CancelOperation);
+            });
+
             // Content view handling
             this.WhenAnyValue(x => x.ViewModel.Content)
                 .Where(x => x != null)
@@ -48,24 +56,24 @@ namespace Swift.Views {
             Observable.FromEventPattern<RoutedEventHandler, RoutedEventArgs>(
                 h => Tray.TrayLeftMouseUp += h, h => Tray.TrayLeftMouseUp -= h)
                 .Subscribe(_ => {
-                    SetWindowLocation();
-                    Show();
-                    Activate();
+                    if (!_shouldNotShow) {
+                        SetWindowLocation();
+                        Show();
+                        Activate();
+                    }
+                    _shouldNotShow = false;
                 });
 
             // hide the window when opening the context menu
             Observable.FromEventPattern<RoutedEventHandler, RoutedEventArgs>(
                 h => Tray.TrayRightMouseDown += h, h => Tray.TrayRightMouseDown -= h)
-                .Subscribe(_ => Hide());
-
-            // app level error handler
-            UserError.RegisterHandler(error => {
-                Tray.ShowBalloonTip("Error", error.ErrorMessage, BalloonIcon.Error);
-                return Observable.Return(RecoveryOptionResult.CancelOperation);
-            });
+                .Subscribe(_ => _shouldNotShow = false);
 
             // hide window when user clicks outside the window
-            this.Events().Deactivated.Subscribe(_ => Hide());
+            this.Events().Deactivated.Subscribe(_ => {
+                _shouldNotShow = WindowPosition.IsCursorOverNotifyIcon(Tray) && WindowPosition.IsNotificationAreaActive;
+                Hide();
+            });
 
             this.Events().SourceInitialized.Subscribe(_ => {
                 // we need to disable the resizing cursors
@@ -92,6 +100,7 @@ namespace Swift.Views {
         #endregion
 
         private void SetWindowLocation() {
+            // TODO: Actually use real DPI
             var position = WindowPosition.GetWindowPosition(Tray, Width, Height, 1.0);
             Top = position.Y;
             Left = position.X;

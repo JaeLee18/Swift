@@ -33,6 +33,20 @@ namespace Swift.Helpers {
         }
 
         /// <summary>
+        /// Gets a value indicating whether the notification area is active.
+        /// </summary>
+        public static bool IsNotificationAreaActive {
+            get {
+                var foregroundWindow = NativeMethods.GetForegroundWindow();
+                var tray = NativeMethods.FindWindow("Shell_TrayWnd", string.Empty);
+
+                // Windows 7 notification area fly-out
+                var overflowWindow = NativeMethods.FindWindow("NotifyIconOverflowWindow", string.Empty);
+                return (foregroundWindow == tray || foregroundWindow == overflowWindow);
+            }
+        }
+
+        /// <summary>
         /// Returns the optimum window position in relation to the specified notify icon.
         /// </summary>
         public static Point GetWindowPosition(TaskbarIcon icon, double width, double height, double dpi) {
@@ -184,7 +198,7 @@ namespace Swift.Helpers {
         private static Point GetCursorPosition() {
             var result = new NativeMethods.POINT();
             NativeMethods.GetPhysicalCursorPos(ref result);
-            return new Point(result.x, result.y);
+            return result;
         }
 
         /// <summary>
