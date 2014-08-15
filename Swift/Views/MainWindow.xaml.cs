@@ -23,18 +23,18 @@ namespace Swift.Views {
             this.OneWayBind(ViewModel, x => x.Title, x => x.Tray.ToolTipText);
 
             // Tray context action
-            this.BindCommand(ViewModel, x => x.ProfileCommand, x => x.MenuProfile);
-            this.BindCommand(ViewModel, x => x.DashboardCommand, x => x.MenuDash);
-            this.BindCommand(ViewModel, x => x.CommunityCommand, x => x.MenuForums);
-            this.BindCommand(ViewModel, x => x.ExitCommand, x => x.MenuExit);
+            this.BindCommand(ViewModel, x => x.Profile, x => x.MenuProfile);
+            this.BindCommand(ViewModel, x => x.Dashboard, x => x.MenuDash);
+            this.BindCommand(ViewModel, x => x.Community, x => x.MenuForums);
+            this.BindCommand(ViewModel, x => x.Exit, x => x.MenuExit);
 
-            this.WhenAnyObservable(x => x.ViewModel.ProfileCommand)
+            this.WhenAnyObservable(x => x.ViewModel.Profile)
                 .Subscribe(_ => Process.Start(ViewModel.ProfileUrl));
-            this.WhenAnyObservable(x => x.ViewModel.DashboardCommand)
+            this.WhenAnyObservable(x => x.ViewModel.Dashboard)
                 .Subscribe(_ => Process.Start(ViewModel.DashboardUrl));
-            this.WhenAnyObservable(x => x.ViewModel.CommunityCommand)
+            this.WhenAnyObservable(x => x.ViewModel.Community)
                 .Subscribe(_ => Process.Start(ViewModel.CommunityUrl));
-            this.WhenAnyObservable(x => x.ViewModel.ExitCommand)
+            this.WhenAnyObservable(x => x.ViewModel.Exit)
                 .Subscribe(_ => Close());
 
             // app level error handler

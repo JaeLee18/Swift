@@ -7,7 +7,6 @@ namespace Swift.ViewModels {
     public class MainViewModel : ReactiveObject {
         private readonly Account _account;
         private ReactiveObject _content;
-        private bool _isVisible;
 
         public string Title {
             get {
@@ -32,16 +31,10 @@ namespace Swift.ViewModels {
             set { this.RaiseAndSetIfChanged(ref _content, value); }
         }
 
-        public bool IsVisible {
-            get { return _isVisible; }
-            set { this.RaiseAndSetIfChanged(ref _isVisible, value); }
-        }
-
-        public ReactiveCommand<object> VisbilityCommand { get; private set; }
-        public ReactiveCommand<object> ProfileCommand { get; private set; }
-        public ReactiveCommand<object> DashboardCommand { get; private set; }
-        public ReactiveCommand<object> CommunityCommand { get; private set; }
-        public ReactiveCommand<object> ExitCommand { get; private set; }
+        public ReactiveCommand<object> Profile { get; private set; }
+        public ReactiveCommand<object> Dashboard { get; private set; }
+        public ReactiveCommand<object> Community { get; private set; }
+        public ReactiveCommand<object> Exit { get; private set; }
 
         public MainViewModel() {
             _account = Service.Get<Account>();
@@ -49,18 +42,15 @@ namespace Swift.ViewModels {
 
             var isLoggedIn = this.WhenAnyValue(x => x._account.HasCredentials);
 
-            VisbilityCommand = ReactiveCommand.Create();
-            ProfileCommand = ReactiveCommand.Create(isLoggedIn);
-            DashboardCommand = ReactiveCommand.Create(isLoggedIn);
-            CommunityCommand = ReactiveCommand.Create(isLoggedIn);
-            ExitCommand = ReactiveCommand.Create();
-
-            VisbilityCommand.Subscribe(value => IsVisible = (bool)value);
+            Profile = ReactiveCommand.Create(isLoggedIn);
+            Dashboard = ReactiveCommand.Create(isLoggedIn);
+            Community = ReactiveCommand.Create(isLoggedIn);
+            Exit = ReactiveCommand.Create();
         }
 
         private void ShowInitialContent() {
             if (_account.HasCredentials) {
-                Content = Service.Get<AnimeViewModel>();
+                Content = Service.Get<MediaViewModel>();
             } else {
                 Content = Service.Get<AuthViewModel>();
             }

@@ -5,12 +5,14 @@ using Swift.API.Extensions;
 using Swift.API.Helpers;
 
 namespace Swift.API.Http {
-    public class Connection {
+    public class Connection : IConnection {
         public IRestClient Client { get; private set; }
 
         public Connection(IRestClient client) {
             Client = client;
         }
+
+        #region IConnection Members
 
         public IObservable<IRestResponse> ExecuteRaw(string endpoint, IList<Parameter> parameters,
             Method method = Method.GET) {
@@ -33,6 +35,8 @@ namespace Swift.API.Http {
 
             return Client.ExecuteRxRaw(request);
         }
+
+        #endregion
 
         private static IRestRequest BuildRequest(string endpoint, IEnumerable<Parameter> parameters) {
             var request = new RestRequest(endpoint);

@@ -221,7 +221,7 @@ namespace Swift.Helpers {
 
             // return null if the call failed
             if (result == IntPtr.Zero) {
-                throw new Exception("Could not retrieve taskbar information.");
+                throw new ApplicationException("Could not retrieve taskbar information.");
             }
 
             Rect position = abdata.rc;
@@ -242,7 +242,7 @@ namespace Swift.Helpers {
                     alignment = TaskBarAlignment.Right;
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException("Couldn't retrieve location of taskbar.");
+                    throw new ApplicationException("Couldn't retrieve location of taskbar.");
             }
 
             return new TaskBarInfo { Position = position, Alignment = alignment };
@@ -261,7 +261,7 @@ namespace Swift.Helpers {
 
             var result = NativeMethods.GetMonitorInfo(monitorHandle, ref monitorInfo);
             if (!result) {
-                throw new Exception("Failed to retrieve monitor information.");
+                throw new ApplicationException("Failed to retrieve monitor information.");
             }
 
             return monitorInfo.rcWork;

@@ -26,14 +26,14 @@ namespace Swift {
             // app registrations
             Service.RegisterConstant(Task.Run(async () => await new Account().UpdateFromCache()).Result, typeof(Account));
 
-            Service.RegisterLazy(() => new HummingbirdClient(), typeof(HummingbirdClient));
+            Service.RegisterLazy(() => new HummingbirdClient(), typeof(IHummingbirdClient));
 
             Service.RegisterLazy(() => new MainViewModel(), typeof(MainViewModel));
             Service.RegisterLazy(() => new AuthViewModel(), typeof(AuthViewModel));
-            Service.RegisterLazy(() => new AnimeViewModel(), typeof(AnimeViewModel));
+            Service.RegisterLazy(() => new MediaViewModel(), typeof(MediaViewModel));
 
             Service.Register(() => new AuthView(), typeof(IViewFor<AuthViewModel>));
-            Service.Register(() => new AnimeView(), typeof(IViewFor<AnimeViewModel>));
+            Service.Register(() => new MediaView(), typeof(IViewFor<MediaViewModel>));
         }
     }
 }

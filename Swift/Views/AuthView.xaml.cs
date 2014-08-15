@@ -18,13 +18,13 @@ namespace Swift.Views {
             this.WhenActivated(d => {
                 d(this.Bind(ViewModel, x => x.Username, x => x.Username.Text));
                 d(this.Bind(ViewModel, x => x.Password, x => x.Password.Password, Password.Events().PasswordChanged));
-                d(this.BindCommand(ViewModel, x => x.AuthCommand, x => x.SignIn));
-                d(NoAccount.Events().MouseLeftButtonUp.InvokeCommand(ViewModel, x => x.RegistrationCommand));
-                d(ForgotPass.Events().MouseLeftButtonUp.InvokeCommand(ViewModel, x => x.ResetPasswordCommand));
+                d(this.BindCommand(ViewModel, x => x.SignIn, x => x.SignIn));
+                d(NoAccount.Events().MouseLeftButtonUp.InvokeCommand(ViewModel, x => x.Registration));
+                d(ForgotPass.Events().MouseLeftButtonUp.InvokeCommand(ViewModel, x => x.ResetPassword));
 
                 // Avatar handling
-                d(Username.Events().LostFocus.InvokeCommand(ViewModel, x => x.AvatarCommand));
-                d(this.WhenAnyObservable(x => x.ViewModel.AvatarCommand)
+                d(Username.Events().LostFocus.InvokeCommand(ViewModel, x => x.Avatar));
+                d(this.WhenAnyObservable(x => x.ViewModel.Avatar)
                     .Subscribe(bitmap => Avatar.Source = bitmap.ToNative()));
 
                 // set/remove underline on links
@@ -34,9 +34,9 @@ namespace Swift.Views {
                     .Subscribe(e => { (e.Source as TextBlock).TextDecorations = null; });
 
                 // handle external links
-                d(this.WhenAnyObservable(x => x.ViewModel.RegistrationCommand)
+                d(this.WhenAnyObservable(x => x.ViewModel.Registration)
                     .Subscribe(_ => Process.Start(ViewModel.RegistrationUrl)));
-                d(this.WhenAnyObservable(x => x.ViewModel.ResetPasswordCommand)
+                d(this.WhenAnyObservable(x => x.ViewModel.ResetPassword)
                     .Subscribe(_ => Process.Start(ViewModel.ResetUrl)));
             });
         }

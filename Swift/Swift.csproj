@@ -149,11 +149,11 @@
     <Compile Include="Helpers\WindowPosition.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Helpers\ResizeHook.cs" />
-    <Compile Include="ViewModels\AnimeViewModel.cs" />
+    <Compile Include="ViewModels\MediaViewModel.cs" />
     <Compile Include="ViewModels\AuthViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="Views\AnimeView.xaml.cs">
-      <DependentUpon>AnimeView.xaml</DependentUpon>
+    <Compile Include="Views\MediaView.xaml.cs">
+      <DependentUpon>MediaView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\AuthView.xaml.cs">
       <DependentUpon>AuthView.xaml</DependentUpon>
@@ -195,7 +195,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Views\AnimeView.xaml">
+    <Page Include="Views\MediaView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

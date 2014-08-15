@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Net;
 using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
@@ -15,10 +14,11 @@ namespace Swift.ViewModels {
     public class AuthViewModel : ReactiveObject, ISupportsActivation {
         private string _password;
         private string _username;
-        public ReactiveCommand<IBitmap> AvatarCommand { get; private set; }
-        public ReactiveCommand<string> AuthCommand { get; private set; }
-        public ReactiveCommand<object> RegistrationCommand { get; private set; }
-        public ReactiveCommand<object> ResetPasswordCommand { get; private set; } 
+
+        public ReactiveCommand<IBitmap> Avatar { get; private set; }
+        public ReactiveCommand<string> SignIn { get; private set; }
+        public ReactiveCommand<object> Registration { get; private set; }
+        public ReactiveCommand<object> ResetPassword { get; private set; }
 
         public string Username {
             get { return _username; }
@@ -40,14 +40,14 @@ namespace Swift.ViewModels {
 
         public AuthViewModel() {
             Activator = new ViewModelActivator();
-            AvatarCommand = ReactiveCommand.CreateAsyncObservable(_ => GetAvatar());
-            AuthCommand = ReactiveCommand.CreateAsyncObservable(this.WhenAnyValue(x => x.Username, x => x.Password,
+            Avatar = ReactiveCommand.CreateAsyncObservable(_ => GetAvatar());
+            SignIn = ReactiveCommand.CreateAsyncObservable(this.WhenAnyValue(x => x.Username, x => x.Password,
                 (u, p) => !u.Empty() && !p.Empty()), _ => Authenticate());
-            RegistrationCommand = ReactiveCommand.Create();
-            ResetPasswordCommand = ReactiveCommand.Create();
+            Registration = ReactiveCommand.Create();
+            ResetPassword = ReactiveCommand.Create();
 
             this.WhenActivated(d => {
-                d(AuthCommand.Subscribe(token => {
+                d(SignIn.Subscribe(token => {
                     var account = Service.Get<Account>();
                     account.Username = Username;
                     account.Token = token;
@@ -55,25 +55,27 @@ namespace Swift.ViewModels {
 
                     // change the content over to the app
                     var vm = Service.Get<MainViewModel>();
-                    vm.Content = Service.Get<AnimeViewModel>();
+                    vm.Content = Service.Get<MediaViewModel>();
                 }));
 
-                d(AuthCommand.ThrownExceptions.Select(x => {
-                    Debug.WriteLine(x);
-                    if (x is ApiException) {
-                        var ex = x as ApiException;
-                        if (ex.StatusCode == HttpStatusCode.Unauthorized) {
-                            return new UserError("Check your credentials, and try again.");
+                d(SignIn.ThrownExceptions
+                    .Select(x => {
+                        if (x is ApiException) {
+                            var ex = x as ApiException;
+                            if (ex.StatusCode == HttpStatusCode.Unauthorized) {
+                                return new UserError("Check your credentials, and try again.");
+                            }
                         }
-                    }
-                    return new UserError("There was an issue authenticating with Hummingbird.");
-                }).SelectMany(UserError.Throw).Subscribe(_ => {
-                    Username = "";
-                    Password = "";
+                        return new UserError("There was an issue authenticating with Hummingbird.");
+                    })
+                    .SelectMany(UserError.Throw)
+                    .Subscribe(_ => {
+                        Username = "";
+                        Password = "";
 
-                    // will set the avatar back to blank hummingbird
-                    AvatarCommand.Execute(null);
-                }));
+                        // will set the avatar back to blank hummingbird
+                        Avatar.Execute(null);
+                    }));
             });
         }
 
@@ -90,14 +92,14 @@ namespace Swift.ViewModels {
             return _username.Empty()
                 ? @default
                 : Observable.StartAsync(async () => {
-                    var client = Service.Get<HummingbirdClient>();
+                    var client = Service.Get<IHummingbirdClient>();
                     var user = await client.Users.GetInfo(Username);
                     return user.Avatar;
                 }).SelectMany(url => ImageCache.Get(url, 100, 100)).Catch(@default);
         }
 
         private IObservable<string> Authenticate() {
-            var client = Service.Get<HummingbirdClient>();
+            var client = Service.Get<IHummingbirdClient>();
             return client.Users.Authenticate(Username, Password);
         }
     }

@@ -10,8 +10,8 @@ namespace Swift.Views {
     /// <summary>
     /// Interaction logic for AnimeView.xaml
     /// </summary>
-    public partial class AnimeView : UserControl, IViewFor<AnimeViewModel> {
-        public AnimeView() {
+    public partial class MediaView : UserControl, IViewFor<MediaViewModel> {
+        public MediaView() {
             InitializeComponent();
 
             this.WhenActivated(d => {
@@ -22,8 +22,8 @@ namespace Swift.Views {
                 }
 
                 // open hummingbird when clicking link
-                d(ExternalText.Events().MouseLeftButtonUp.InvokeCommand(ViewModel, x => x.ExternalCommand));
-                d(this.WhenAnyObservable(x => x.ViewModel.ExternalCommand)
+                d(ExternalText.Events().MouseLeftButtonUp.InvokeCommand(ViewModel, x => x.External));
+                d(this.WhenAnyObservable(x => x.ViewModel.External)
                     .Subscribe(_ => Process.Start(ViewModel.HummingbirdUrl)));
 
                 // underline on external link hover
@@ -39,10 +39,10 @@ namespace Swift.Views {
 
         object IViewFor.ViewModel {
             get { return ViewModel; }
-            set { ViewModel = value as AnimeViewModel; }
+            set { ViewModel = value as MediaViewModel; }
         }
 
-        public AnimeViewModel ViewModel { get; set; }
+        public MediaViewModel ViewModel { get; set; }
 
         #endregion
     }

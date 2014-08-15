@@ -8,12 +8,14 @@ using Swift.API.Http;
 using Swift.API.Models.Responses;
 
 namespace Swift.API.Clients {
-    public class UsersClient {
-        private readonly Connection _connection;
+    public class UsersClient : IUsersClient {
+        private readonly IConnection _connection;
 
-        public UsersClient(Connection connection) {
+        public UsersClient(IConnection connection) {
             _connection = connection;
         }
+
+        #region IUsersClient Members
 
         public IObservable<User> GetInfo(string username) {
             var parameters = new List<Parameter> {
@@ -33,5 +35,7 @@ namespace Swift.API.Clients {
                 .SelectMany(x => x.ExpectStatus(HttpStatusCode.Created))
                 .SelectMany(x => Observable.Return(x.Content));
         }
+
+        #endregion
     }
 }
