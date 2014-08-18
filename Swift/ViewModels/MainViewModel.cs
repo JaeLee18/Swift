@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using ReactiveUI;
 using Swift.Helpers;
 using Swift.Models;
@@ -12,18 +13,6 @@ namespace Swift.ViewModels {
             get {
                 return _account.HasCredentials ? String.Format("{0} - {1}", App.AppName, _account.Username) : App.AppName;
             }
-        }
-
-        public string ProfileUrl {
-            get { return String.Format("http://hummingbird.me/users/{0}", _account.Username); }
-        }
-
-        public string DashboardUrl {
-            get { return "http://hummingbird.me/dashboard"; }
-        }
-
-        public string CommunityUrl {
-            get { return "http://forums.hummingbird.me/"; }
         }
 
         public ReactiveObject Content {
@@ -46,6 +35,10 @@ namespace Swift.ViewModels {
             Dashboard = ReactiveCommand.Create(isLoggedIn);
             Community = ReactiveCommand.Create(isLoggedIn);
             Exit = ReactiveCommand.Create();
+
+            Profile.Subscribe(_ => Process.Start(String.Format("http://hummingbird.me/users/{0}", _account.Username)));
+            Dashboard.Subscribe(_ => Process.Start("http://hummingbird.me/dashboard"));
+            Community.Subscribe(_ => Process.Start("http://forums.hummingbird.me/"));
         }
 
         private void ShowInitialContent() {

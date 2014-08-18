@@ -1,5 +1,7 @@
 # Swift
 
+[![Build status](https://ci.appveyor.com/api/projects/status/1y7suacy1wo18m9i)](https://ci.appveyor.com/project/vevix/swift)
+
 **Status:** *Early Development*
 
 Swift is an open source Windows client for [Hummingbird](http://hummingbird.me) that

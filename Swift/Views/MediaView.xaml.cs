@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
@@ -23,8 +22,6 @@ namespace Swift.Views {
 
                 // open hummingbird when clicking link
                 d(ExternalText.Events().MouseLeftButtonUp.InvokeCommand(ViewModel, x => x.External));
-                d(this.WhenAnyObservable(x => x.ViewModel.External)
-                    .Subscribe(_ => Process.Start(ViewModel.HummingbirdUrl)));
 
                 // underline on external link hover
                 d(ExternalText.Events().MouseEnter
@@ -35,7 +32,7 @@ namespace Swift.Views {
             });
         }
 
-        #region IViewFor<AnimeViewModel> Members
+        #region IViewFor<MediaViewModel> Members
 
         object IViewFor.ViewModel {
             get { return ViewModel; }

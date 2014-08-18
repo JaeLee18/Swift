@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net;
 using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
@@ -28,14 +29,6 @@ namespace Swift.ViewModels {
         public string Password {
             get { return _password; }
             set { this.RaiseAndSetIfChanged(ref _password, value); }
-        }
-
-        public string RegistrationUrl {
-            get { return "http://hummingbird.me/users/sign_up"; }
-        }
-
-        public string ResetUrl {
-            get { return "http://hummingbird.me/users/password/new"; }
         }
 
         public AuthViewModel() {
@@ -76,6 +69,9 @@ namespace Swift.ViewModels {
                         // will set the avatar back to blank hummingbird
                         Avatar.Execute(null);
                     }));
+
+                Registration.Subscribe(_ => Process.Start("http://hummingbird.me/users/sign_up"));
+                ResetPassword.Subscribe(_ => Process.Start("http://hummingbird.me/users/password/new"));
             });
         }
 

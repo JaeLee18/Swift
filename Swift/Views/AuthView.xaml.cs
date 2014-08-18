@@ -32,12 +32,6 @@ namespace Swift.Views {
                     .Subscribe(e => { (e.Source as TextBlock).TextDecorations = TextDecorations.Underline; });
                 NoAccount.Events().MouseLeave.Merge(ForgotPass.Events().MouseLeave)
                     .Subscribe(e => { (e.Source as TextBlock).TextDecorations = null; });
-
-                // handle external links
-                d(this.WhenAnyObservable(x => x.ViewModel.Registration)
-                    .Subscribe(_ => Process.Start(ViewModel.RegistrationUrl)));
-                d(this.WhenAnyObservable(x => x.ViewModel.ResetPassword)
-                    .Subscribe(_ => Process.Start(ViewModel.ResetUrl)));
             });
         }
 
