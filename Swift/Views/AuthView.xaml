@@ -9,8 +9,7 @@
             <TextBlock FontSize="16" FontWeight="Light" TextAlignment="Center" Margin="0,0,0,20"
                        Text="Sign in with your Hummingbird account" Foreground="#2d2c2e" />
 
-            <Image x:Name="Avatar" Source="pack://application:,,,/Swift;component/Resources/avatar.png" Width="100"
-                   Height="100" Margin="0,0,0,20" />
+            <Image x:Name="Avatar" Width="100" Height="100" Margin="0,0,0,20" />
 
             <TextBox x:Name="Username" Width="250" Padding="4" Margin="0,0,0,10"
                      Style="{DynamicResource WatermarkTextBox}" />

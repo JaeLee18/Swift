@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Reactive.Linq;
-using System.Windows;
 using System.Windows.Controls;
 using ReactiveUI;
 using Splat;
@@ -19,6 +17,10 @@ namespace Swift.Views {
                 d(this.Bind(ViewModel, x => x.Username, x => x.Username.Text));
                 d(this.Bind(ViewModel, x => x.Password, x => x.Password.Password, Password.Events().PasswordChanged));
                 d(this.BindCommand(ViewModel, x => x.SignIn, x => x.SignIn));
+
+                // Change the text of the SignIn control based on state
+                d(this.WhenAnyObservable(x => x.ViewModel.SignIn.IsExecuting)
+                    .Subscribe(state => { SignIn.Content = state ? "Signing In..." : "Sign In"; }));
 
                 // Invoke ViewModel commands when the external "links" are clicked
                 d(NoAccount.Events().MouseLeftButtonUp.InvokeCommand(ViewModel, x => x.Registration));

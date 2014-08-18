@@ -20,7 +20,7 @@ namespace Swift.Views {
         public MainWindow() {
             InitializeComponent();
             // Set the viewmodel as this view isn't invoked by ReactiveUI
-            ViewModel = Service.Get<MainViewModel>();
+            ViewModel = new MainViewModel();
 
             this.OneWayBind(ViewModel, x => x.Title, x => x.Title);
             this.OneWayBind(ViewModel, x => x.Title, x => x.Tray.ToolTipText);

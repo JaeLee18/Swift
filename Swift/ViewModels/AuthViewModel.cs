@@ -33,24 +33,32 @@ namespace Swift.ViewModels {
 
         public AuthViewModel() {
             Activator = new ViewModelActivator();
-            Avatar = ReactiveCommand.CreateAsyncObservable(_ => GetAvatar());
-            SignIn = ReactiveCommand.CreateAsyncObservable(this.WhenAnyValue(x => x.Username, x => x.Password,
-                (u, p) => !u.Empty() && !p.Empty()), _ => Authenticate());
-            Registration = ReactiveCommand.Create();
-            ResetPassword = ReactiveCommand.Create();
+            var canSignIn = this.WhenAnyValue(x => x.Username, x => x.Password,
+                (u, p) => !u.Empty() && !p.Empty());
 
             this.WhenActivated(d => {
+                d(Avatar = ReactiveCommand.CreateAsyncObservable(_ => GetAvatar()));
+                d(SignIn = ReactiveCommand.CreateAsyncObservable(canSignIn, _ => Authenticate()));
+                d(Registration = ReactiveCommand.Create());
+                d(ResetPassword = ReactiveCommand.Create());
+
+                // External links
+                d(Registration.Subscribe(_ => Process.Start("http://hummingbird.me/users/sign_up")));
+                d(ResetPassword.Subscribe(_ => Process.Start("http://hummingbird.me/users/password/new")));
+
+                // Handle when signing in was successful
                 d(SignIn.Subscribe(token => {
+                    // Save the correct user data to the secure cache
                     var account = Service.Get<Account>();
                     account.Username = Username;
                     account.Token = token;
                     account.Save();
 
-                    // change the content over to the app
-                    var vm = Service.Get<MainViewModel>();
-                    vm.Content = Service.Get<MediaViewModel>();
+                    // Sign in was successful, Tell the MainView to change the content view
+                    MessageBus.Current.SendMessage(new MediaViewModel() as ReactiveObject, "Content");
                 }));
 
+                // Handle when an exception is thrown during the sign in process
                 d(SignIn.ThrownExceptions
                     .Select(x => {
                         if (x is ApiException) {
@@ -63,6 +71,7 @@ namespace Swift.ViewModels {
                     })
                     .SelectMany(UserError.Throw)
                     .Subscribe(_ => {
+                        // Error was thrown to the handler, empty out the credentials
                         Username = "";
                         Password = "";
 
@@ -70,8 +79,8 @@ namespace Swift.ViewModels {
                         Avatar.Execute(null);
                     }));
 
-                Registration.Subscribe(_ => Process.Start("http://hummingbird.me/users/sign_up"));
-                ResetPassword.Subscribe(_ => Process.Start("http://hummingbird.me/users/password/new"));
+                // Execute the Avatar command so that the default image is set on the view
+                Avatar.Execute(null);
             });
         }
 
@@ -81,19 +90,29 @@ namespace Swift.ViewModels {
 
         #endregion
 
+        /// <summary>
+        /// Retrieves the avatar for the username from Hummingbird
+        /// </summary>
         private IObservable<IBitmap> GetAvatar() {
+            // Default image that is used when an exception is thrown
+            // or when `Username` is empty
             var @default = BitmapLoader.Current.LoadFromResource(
                 "pack://application:,,,/Swift;component/Resources/avatar.png", 100, 100).ToObservable();
 
-            return _username.Empty()
-                ? @default
-                : Observable.StartAsync(async () => {
-                    var client = Service.Get<IHummingbirdClient>();
-                    var user = await client.Users.GetInfo(Username);
-                    return user.Avatar;
-                }).SelectMany(url => ImageCache.Get(url, 100, 100)).Catch(@default);
+            if (Username.Empty()) {
+                return @default;
+            }
+
+            // Username is "valid" at this point so attempt to grab URL to avatar from API
+            var client = Service.Get<IHummingbirdClient>();
+            return client.Users.GetInfo(Username)
+                .SelectMany(user => ImageCache.Get(user.Avatar, 100, 100))
+                .Catch(@default);
         }
 
+        /// <summary>
+        /// Authenticates the credentials with Hummingbird
+        /// </summary>
         private IObservable<string> Authenticate() {
             var client = Service.Get<IHummingbirdClient>();
             return client.Users.Authenticate(Username, Password);

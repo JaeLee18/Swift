@@ -8,9 +8,10 @@ namespace Swift.ViewModels {
 
         public MediaViewModel() {
             Activator = new ViewModelActivator();
-            External = ReactiveCommand.Create();
-
+            
             this.WhenActivated(d => {
+                d(External = ReactiveCommand.Create());
+
                 d(External.Subscribe(_ => Process.Start("http://hummingbird.me/dashboard")));
             });
         }

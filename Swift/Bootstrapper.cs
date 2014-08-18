@@ -27,12 +27,10 @@ namespace Swift {
             // We want to load account data synchronously
             Service.RegisterConstant(Task.Run(async () => await new Account().UpdateFromCache()).Result, typeof(Account));
 
+            // API Client (Swift.API)
             Service.RegisterLazy(() => new HummingbirdClient(), typeof(IHummingbirdClient));
 
-            Service.RegisterLazy(() => new MainViewModel(), typeof(MainViewModel));
-            Service.RegisterLazy(() => new AuthViewModel(), typeof(AuthViewModel));
-            Service.RegisterLazy(() => new MediaViewModel(), typeof(MediaViewModel));
-
+            // Views
             Service.Register(() => new AuthView(), typeof(IViewFor<AuthViewModel>));
             Service.Register(() => new MediaView(), typeof(IViewFor<MediaViewModel>));
         }
