@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,22 +15,21 @@ namespace Swift.Views {
             InitializeComponent();
 
             this.WhenActivated(d => {
+                // Control bindings
                 d(this.Bind(ViewModel, x => x.Username, x => x.Username.Text));
                 d(this.Bind(ViewModel, x => x.Password, x => x.Password.Password, Password.Events().PasswordChanged));
                 d(this.BindCommand(ViewModel, x => x.SignIn, x => x.SignIn));
+
+                // Invoke ViewModel commands when the external "links" are clicked
                 d(NoAccount.Events().MouseLeftButtonUp.InvokeCommand(ViewModel, x => x.Registration));
                 d(ForgotPass.Events().MouseLeftButtonUp.InvokeCommand(ViewModel, x => x.ResetPassword));
 
-                // Avatar handling
+                // Attempt to grab the users avatar when the Username control loses focus
                 d(Username.Events().LostFocus.InvokeCommand(ViewModel, x => x.Avatar));
+
+                // Received `IBitmap` of the users avatar
                 d(this.WhenAnyObservable(x => x.ViewModel.Avatar)
                     .Subscribe(bitmap => Avatar.Source = bitmap.ToNative()));
-
-                // set/remove underline on links
-                NoAccount.Events().MouseEnter.Merge(ForgotPass.Events().MouseEnter)
-                    .Subscribe(e => { (e.Source as TextBlock).TextDecorations = TextDecorations.Underline; });
-                NoAccount.Events().MouseLeave.Merge(ForgotPass.Events().MouseLeave)
-                    .Subscribe(e => { (e.Source as TextBlock).TextDecorations = null; });
             });
         }
 

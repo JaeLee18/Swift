@@ -1,9 +1,7 @@
 ﻿using System;
 using System.IO;
-using System.Runtime;
 using System.Threading;
 using System.Windows;
-using Akavache;
 
 namespace Swift {
     /// <summary>
@@ -15,30 +13,26 @@ namespace Swift {
         private Bootstrapper _bootstrapper;
 
         protected override void OnStartup(StartupEventArgs e) {
-            // application mutex
+            // Mutex, so only one instance of Swift can be active at once
             _appMutex = new Mutex(true, "Swift-C8711788-C5B5-461A-B34A-7B396937D900");
             if (!_appMutex.WaitOne(0, false)) {
                 MessageBox.Show(String.Format("{0} is already running.", AppName), AppName);
                 Environment.Exit(0);
             }
 
-            // create app directory in %APPDATA%
+            // Create our appliation directory in %APPDATA% (Usually: C:\Users\{username}\AppData\Roaming\Swift)
             var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), AppName);
             if (!Directory.Exists(dir)) {
                 Directory.CreateDirectory(dir);
             }
 
-            // enable multicore JIT
-            ProfileOptimization.SetProfileRoot(dir);
-            ProfileOptimization.StartProfile("Swift.profile");
-
-            // create cache dir
+            // Create `Cache` sub-directory under our %APPDATA% directory
             var cacheDir = Path.Combine(dir, "Cache");
             if (!Directory.Exists(cacheDir)) {
                 Directory.CreateDirectory(cacheDir);
             }
 
-            // run registration
+            // Run our bootstrapper code
             _bootstrapper = new Bootstrapper();
             _bootstrapper.AppRegistration(cacheDir);
 

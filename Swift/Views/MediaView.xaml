@@ -25,11 +25,7 @@
         <Grid Grid.Row="0" Visibility="Collapsed" />
         <Border Grid.Row="1" Background="WhiteSmoke" BorderThickness="0,1,0,0" BorderBrush="LightGray">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <TextBlock x:Name="ExternalText" Text="Open Hummingbird..." VerticalAlignment="Center" Cursor="Hand">
-                    <TextBlock.Foreground>
-                        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.HotTrackColorKey}}" />
-                    </TextBlock.Foreground>
-                </TextBlock>
+                <Label x:Name="ExternalText" Content="Open Hummingbird..." VerticalAlignment="Center" Style="{StaticResource WebLinkLabel}" />
             </StackPanel>
         </Border>
     </Grid>

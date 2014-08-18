@@ -18,10 +18,10 @@
 
             <Button x:Name="SignIn" Content="Sign in" Width="100" Height="24" Margin="0,0,0,10" />
 
-            <TextBlock x:Name="NoAccount" Text="Don't have a Hummingbird account?" HorizontalAlignment="Center"
-                       Margin="0,20,0,5" Foreground="#777" Cursor="Hand" />
-            <TextBlock x:Name="ForgotPass" Text="Forgot password?" HorizontalAlignment="Center" Margin="0,0,0,10"
-                       Foreground="#777" Cursor="Hand" />
+            <Label x:Name="NoAccount" Content="Don't have a Hummingbird account?" HorizontalAlignment="Center"
+                       Margin="0,20,0,5" Style="{StaticResource WebLinkLabel}" />
+            <Label x:Name="ForgotPass" Content="Forgot password?" HorizontalAlignment="Center" Margin="0,0,0,10"
+                       Style="{StaticResource WebLinkLabel}" />
         </StackPanel>
     </Grid>
 </UserControl>

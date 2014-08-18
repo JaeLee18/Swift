@@ -6,6 +6,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/Swift;component/Views/Style/Watermark.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Swift;component/Views/Style/Label.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

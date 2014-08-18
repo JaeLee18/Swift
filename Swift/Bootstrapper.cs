@@ -13,9 +13,10 @@ using Swift.Views;
 namespace Swift {
     public class Bootstrapper {
         public void AppRegistration(string dir) {
-            // Initialize Akavace + Custom directories
+            // Initialize Akavache
             BlobCache.ApplicationName = App.AppName;
 
+            // Use a custom directory for Akavache cache store
             Service.RegisterLazy(() =>
                 new SQLiteEncryptedBlobCache(Path.Combine(dir, "SecureCache.db")), typeof(ISecureBlobCache));
             Service.RegisterLazy(() =>
@@ -23,7 +24,7 @@ namespace Swift {
             Service.RegisterLazy(() =>
                 new SQLitePersistentBlobCache(Path.Combine(dir, "LocalCache.db")), typeof(IBlobCache), "LocalMachine");
 
-            // app registrations
+            // We want to load account data synchronously
             Service.RegisterConstant(Task.Run(async () => await new Account().UpdateFromCache()).Result, typeof(Account));
 
             Service.RegisterLazy(() => new HummingbirdClient(), typeof(IHummingbirdClient));

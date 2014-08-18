@@ -7,28 +7,22 @@ using Swift.ViewModels;
 
 namespace Swift.Views {
     /// <summary>
-    /// Interaction logic for AnimeView.xaml
+    /// Interaction logic for MediaView.xaml
     /// </summary>
     public partial class MediaView : UserControl, IViewFor<MediaViewModel> {
         public MediaView() {
             InitializeComponent();
 
             this.WhenActivated(d => {
-                // begin fade animation on radio tower
+                // Start the Storyboard animation when the view is Activated
+                // See `MediaView.xml` for the Storyboard implementation.
                 var board = TryFindResource("FadeAnimation") as Storyboard;
                 if (board != null) {
                     board.Begin();
                 }
 
-                // open hummingbird when clicking link
+                // Invoke ViewModel command when external link is clicked
                 d(ExternalText.Events().MouseLeftButtonUp.InvokeCommand(ViewModel, x => x.External));
-
-                // underline on external link hover
-                d(ExternalText.Events().MouseEnter
-                    .Subscribe(_ => ExternalText.TextDecorations = TextDecorations.Underline));
-
-                d(ExternalText.Events().MouseLeave
-                    .Subscribe(_ => ExternalText.TextDecorations = null));
             });
         }
 
