@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Reactive.Linq;
 using System.Windows.Controls;
+using System.Windows.Input;
 using ReactiveUI;
 using Splat;
 using Swift.ViewModels;
@@ -32,6 +34,12 @@ namespace Swift.Views {
                 // Received `IBitmap` of the users avatar
                 d(this.WhenAnyObservable(x => x.ViewModel.Avatar)
                     .Subscribe(bitmap => Avatar.Source = bitmap.ToNative()));
+
+                // Allow 'Enter/Return' to execute authentication
+                d(this.Events().KeyUp
+                    .Where(x => x.Key == Key.Enter)
+                    .Where(_ => ViewModel.SignIn.CanExecute(null))
+                    .Subscribe(_ => ViewModel.SignIn.Execute(null)));
             });
         }
 

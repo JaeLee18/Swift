@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net;
 using System.Reactive.Linq;
 using RestSharp;
@@ -31,6 +32,7 @@ namespace Swift.API.Clients {
                 new Parameter { Name = "username", Value = username, Type = ParameterType.QueryString },
                 new Parameter { Name = "password", Value = password, Type = ParameterType.QueryString }
             };
+
             return _connection.ExecuteRaw("users/authenticate", parameters, Method.POST)
                 .SelectMany(x => x.ExpectStatus(HttpStatusCode.Created))
                 .SelectMany(x => Observable.Return(x.Content));

@@ -23,9 +23,11 @@
         </StackPanel>
         <Border Grid.Row="1" Background="WhiteSmoke" BorderThickness="0,1,0,0" BorderBrush="LightGray">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Label x:Name="NoAccount" Content="Don't have a Hummingbird account?" VerticalAlignment="Center" HorizontalAlignment="Center"
+                <Label x:Name="NoAccount" Content="Don't have a Hummingbird account?" VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
                        Margin="0" Style="{StaticResource WebLinkLabel}" />
-                <Label x:Name="ForgotPass" Content="Forgot password?" VerticalAlignment="Center" HorizontalAlignment="Center"
+                <Label x:Name="ForgotPass" Content="Forgot password?" VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
                        Style="{StaticResource WebLinkLabel}" />
             </StackPanel>
         </Border>
