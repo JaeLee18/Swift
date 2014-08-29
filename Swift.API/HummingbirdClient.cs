@@ -1,6 +1,8 @@
 ﻿using RestSharp;
 using Swift.API.Clients;
+using Swift.API.Clients.Interfaces;
 using Swift.API.Http;
+using Swift.API.Http.Interfaces;
 
 namespace Swift.API {
     public class HummingbirdClient : IHummingbirdClient {

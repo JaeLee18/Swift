@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using RestSharp;
 using Swift.API.Extensions;
 using Swift.API.Helpers;
+using Swift.API.Http.Interfaces;
 
 namespace Swift.API.Http {
     public class Connection : IConnection {

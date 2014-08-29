@@ -1,5 +1,5 @@
-﻿using Swift.API.Clients;
-using Swift.API.Http;
+﻿using Swift.API.Clients.Interfaces;
+using Swift.API.Http.Interfaces;
 
 namespace Swift.API {
     public interface IHummingbirdClient {

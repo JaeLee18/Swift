@@ -96,13 +96,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Clients\IUsersClient.cs" />
+    <Compile Include="Clients\Interfaces\IUsersClient.cs" />
     <Compile Include="Clients\UsersClient.cs" />
     <Compile Include="Exceptions\ApiException.cs" />
     <Compile Include="Extensions\RestSharpExtensions.cs" />
     <Compile Include="Helpers\JsonNetSerializer.cs" />
     <Compile Include="Http\Connection.cs" />
-    <Compile Include="Http\IConnection.cs" />
+    <Compile Include="Http\Interfaces\IConnection.cs" />
     <Compile Include="HummingbirdClient.cs" />
     <Compile Include="IHummingbirdClient.cs" />
     <Compile Include="Models\Responses\User.cs" />

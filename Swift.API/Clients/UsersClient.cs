@@ -4,8 +4,10 @@ using System.Diagnostics;
 using System.Net;
 using System.Reactive.Linq;
 using RestSharp;
+using Swift.API.Clients.Interfaces;
 using Swift.API.Extensions;
 using Swift.API.Http;
+using Swift.API.Http.Interfaces;
 using Swift.API.Models.Responses;
 
 namespace Swift.API.Clients {
