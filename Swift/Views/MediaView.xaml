@@ -24,7 +24,7 @@
         <!-- anime detected -->
         <Grid Grid.Row="0" Visibility="Collapsed" />
         <Border Grid.Row="1" Background="WhiteSmoke" BorderThickness="0,1,0,0" BorderBrush="LightGray">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Label x:Name="ExternalText" Content="Open Hummingbird..." VerticalAlignment="Center" Style="{StaticResource WebLinkLabel}" />
             </StackPanel>
         </Border>
